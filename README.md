@@ -16,7 +16,7 @@ A single-page web application that provides:
 - **Five Archetypes** — Diagnostician, Architect, Operative, Network Node, Archaeologist — each with distinct stat multipliers, specialist branches, and ways of reading systems
 - **Operator Profile** — Character sheet with five cognitive stats (Perception, Integration, Diagnosis, Recursion, Perturbation), seven progression stages, and pathway integration tracking
 - **Diagnostic Codex** — Textbook-depth reference library with 50 entries covering core insights, full explanations, clinical cases, intellectual history, and reading lists. Entries unlock as nodes are mastered
-- **Challenge Engine** — Procedural dungeon that generates cybernetic challenges calibrated to your exact level. Every challenge splits into computable analysis (V_C) and normative judgment (V_N), training you to work as a human-AI centaur
+- **Challenge Engine** — Procedural dungeon that generates cybernetic challenges calibrated to your exact level. Every challenge splits into computable analysis ($V_C$) and normative judgment ($V_N$), training you to work as a human-AI centaur
 
 ## The Curriculum
 
@@ -38,8 +38,8 @@ Mastery levels map to Bateson's learning hierarchy: Grafted (Level I — pattern
 Procedurally generated challenges drawn from dense random tables:
 
 - **107 scenarios** across 8 domains (political, organisational, ecological, technological, economic, educational, medical, cultural)
-- **Level-graduated V_C tasks** — the same node produces progressively harder analytical tasks as mastery advances, from scaffolded recognition to cross-domain transfer to reflexive self-application
-- **Pathway-keyed and archetype-keyed V_N tasks** — normative judgments that arise from the specific conceptual territory being tested
+- **Level-graduated $V_C$ tasks** — the same node produces progressively harder analytical tasks as mastery advances, from scaffolded recognition to cross-domain transfer to reflexive self-application
+- **Pathway-keyed and archetype-keyed $V_N$ tasks** — normative judgments that arise from the specific conceptual territory being tested
 - **18 complications** that stack at higher difficulties
 - **Cross-pathway synthesis tasks** testing structural connections across the curriculum
 - **Stat-aware targeting** that exercises underdeveloped cognitive stats
@@ -49,7 +49,7 @@ Difficulty scales automatically from Routine Scan (single concept, scaffolded) t
 
 ## Designed for Chiron
 
-NEUROCYBE was built to work alongside [Chiron](https://kybstudio/xyz) (COMING SOON), a Homeostatic Dialectic Engine (HDE) — an AI that creates a pedagogical human-AI coupling for intelligence amplification. The challenge engine's bifurcation of $V_C$ and $V_N$ maps directly to Chiron's core law: the AI handles computable variety (structural analysis, mapping, synthesis) while the human handles normative variety (judgment, ethics, strategic choice).
+NEUROCYBE was built to work alongside [Chiron](https://kybstudio.xyz) (COMING SOON), a Homeostatic Dialectic Engine (HDE) — an AI that creates a pedagogical human-AI coupling for intelligence amplification. The challenge engine's bifurcation of $V_C$ and $V_N$ maps directly to Chiron's core law: the AI handles computable variety (structural analysis, mapping, synthesis) while the human handles normative variety (judgment, ethics, strategic choice).
 
 You don't need Chiron to use NEUROCYBE. The skill tree, codex, and challenge generator work as standalone tools. But the system was designed for centaur learning — human and AI working as one unit.
 
