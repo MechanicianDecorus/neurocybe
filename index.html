@@ -667,7 +667,7 @@ const SPECIALIST_NODES = {
 };
 
 // ═══════════ Positioning ═══════════
-const CX = 400, CY = 370;
+const CX = 400, CY = 415;
 function nodePos(angle, tier) {
   const r = 55 + tier * 52;
   const a = (angle * Math.PI) / 180;
@@ -772,9 +772,9 @@ function NeuralMap({ nodeStates, selected, onSelect, allNodes, nodeMap, archetyp
   const archColor = ARCHETYPES[archetype]?.color || "#fff";
 
   return (
-    <svg viewBox="0 0 800 740" style={{ width: "100%", height: "100%", maxHeight: "70vh" }}>
+    <svg viewBox="0 0 800 810" style={{ width: "100%", height: "100%" }}>
       <GlowDefs />
-      <rect width="800" height="740" fill="url(#bg-grad)" />
+      <rect width="800" height="810" fill="url(#bg-grad)" />
 
       {/* Pathway labels */}
       {PATHWAYS.map(p => {
@@ -858,7 +858,7 @@ function NeuralMap({ nodeStates, selected, onSelect, allNodes, nodeMap, archetyp
       })}
 
       {/* Title */}
-      <text x={400} y={30} fill="#0af" textAnchor="middle" opacity={0.5} style={{ fontSize: "10px", fontFamily: "Orbitron", letterSpacing: "6px", textTransform: "uppercase" }}>Neural Augmentation Map</text>
+      <text x={400} y={18} fill="#0af" textAnchor="middle" opacity={0.5} style={{ fontSize: "10px", fontFamily: "Orbitron", letterSpacing: "6px", textTransform: "uppercase" }}>Neural Augmentation Map</text>
     </svg>
   );
 }
@@ -927,7 +927,7 @@ function OperatorProfile({ nodeStates, archetype, onArchChange, allNodes }) {
   const specCount = allNodes.filter(n => n.isSpecialist && MASTERY[nodeStates[n.id]]?.idx >= 2).length;
 
   return (
-    <div style={{ padding: 24, overflowY: "auto", height: "100%" }}>
+    <div style={{ padding: 24, overflowY: "auto", height: "100%", maxWidth: 720, margin: "0 auto", width: "100%" }}>
       <div style={{ textAlign: "center", marginBottom: 32 }}>
         <div style={{ fontFamily: "Orbitron", fontSize: 9, color: textDim, letterSpacing: 4, marginBottom: 8 }}>CURRENT STAGE</div>
         <div style={{ fontFamily: "Orbitron", fontSize: 28, fontWeight: 900, color: stage.color, textShadow: `0 0 30px ${stage.color}44`, marginBottom: 4 }}>{stage.name}</div>
@@ -1042,7 +1042,7 @@ function Codex({ nodeStates, allNodes, nodeMap, archetype }) {
   };
 
   return (
-    <div style={{ padding: 24, overflowY: "auto", height: "100%", maxWidth: 720 }}>
+    <div style={{ padding: 24, overflowY: "auto", height: "100%", maxWidth: 720, margin: "0 auto", width: "100%" }}>
       <div style={{ fontFamily: "Orbitron", fontSize: 9, color: textDim, letterSpacing: 4, marginBottom: 20 }}>DIAGNOSTIC CODEX</div>
 
       {/* Core pathways */}
@@ -1815,6 +1815,23 @@ const CH_CROSS_PATHWAY = [
 ];
 
 
+const CH_ARCHETYPE_FRAMES = {
+  diagnostician: { prefix: "CLINICAL BRIEFING", frame: "Read the system's clinical presentation. Move from surface symptoms to structural diagnosis — then make the normative judgments that diagnosis demands.", vcLabel: "DIAGNOSTIC WORKUP", vnLabel: "CLINICAL JUDGMENT" },
+  architect: { prefix: "DESIGN BRIEF", frame: "This system is a design — mostly accidental. See the design space, identify structural intervention points, then make normative choices about what it should become.", vcLabel: "STRUCTURAL ANALYSIS", vnLabel: "DESIGN JUDGMENT" },
+  operative: { prefix: "COGNITIVE FIELD EXERCISE", frame: "This scenario is a mirror. Analyse the system AND monitor your own cognitive operations as you do so. Where are your frames shaping what you see?", vcLabel: "EXTERNAL ANALYSIS + SELF-AUDIT", vnLabel: "PERSONAL JUDGMENT" },
+  node: { prefix: "COUPLING ANALYSIS", frame: "No system here exists in isolation. Map the coupling topology — how systems mutually perturb each other — then judge where and how to intervene in the network.", vcLabel: "COUPLING MAP", vnLabel: "NETWORK JUDGMENT" },
+  archaeologist: { prefix: "EXCAVATION REPORT", frame: "This system is built on buried foundations. Excavate: what assumptions became invisible? What calcified? Then judge what should be unearthed and what should remain buried.", vcLabel: "STRATIGRAPHIC ANALYSIS", vnLabel: "EXCAVATION JUDGMENT" },
+};
+
+const CH_DIFFICULTY_NAMES = [
+  { level: 1, name: "Routine Scan", color: "#556", desc: "Single concept, familiar domain, explicit framing" },
+  { level: 2, name: "Field Diagnostic", color: "#0af", desc: "Two concepts, moderate domain familiarity" },
+  { level: 3, name: "Complex Case", color: "#0fa", desc: "Multiple concepts, cross-domain, complications" },
+  { level: 4, name: "Critical Pathology", color: "#fa0", desc: "Unfamiliar domain, heavy complications, no scaffolding" },
+  { level: 5, name: "Systemic Crisis", color: "#f06", desc: "Cross-domain transfer, reflexive elements, maximum ambiguity" },
+  { level: 6, name: "Existential Threat", color: "#fff", desc: "Everything at once. The centaur is tested to its limits." },
+];
+
 // Seeded random
 function mulberry32(a) {
   return function() {
@@ -1861,12 +1878,12 @@ function generateChallenge(nodeStates, archetype, allNodes, seed) {
   const scenario = pick(domain.scenarios);
 
   // ─── Pick pathways to test ───
-  const numPathways = Math.min(unlockedPathways.length, Math.max(1, Math.floor(difficulty / 2) + 1));
   let pathwayPool = unlockedPathways.length > 0 ? unlockedPathways : PATHWAYS;
   // At difficulty 4+, weight toward underexplored pathways
   if (difficulty >= 4 && underexplored.length > 0 && rng() > 0.5) {
     pathwayPool = [...underexplored, ...pathwayPool];
   }
+  const numPathways = Math.min(pathwayPool.length, Math.max(1, Math.floor(difficulty / 2) + 1));
   const testedPathways = pickN(pathwayPool, numPathways);
 
   // ─── Pick specific nodes and level-appropriate V_C tasks ───
@@ -1989,24 +2006,30 @@ function generateChallenge(nodeStates, archetype, allNodes, seed) {
 
 function ChallengeTab({ nodeStates, archetype, allNodes, challengeLogs, onLogChallenge }) {
   const [showHistory, setShowHistory] = useState(false);
+  const [error, setError] = useState(null);
   const arch = ARCHETYPES[archetype] || ARCHETYPES.diagnostician;
   const history = (challengeLogs || {})[archetype] || [];
   const [challenge, setChallenge] = useState(() => history[0] || null);
 
-  // When archetype changes, load that archetype's most recent challenge (or null)
   const archRef = useRef(archetype);
   useEffect(() => {
     if (archetype !== archRef.current) {
       archRef.current = archetype;
       const archHistory = (challengeLogs || {})[archetype] || [];
       setChallenge(archHistory[0] || null);
+      setError(null);
     }
   }, [archetype, challengeLogs]);
 
   const generate = useCallback(() => {
-    const ch = generateChallenge(nodeStates, archetype, allNodes, Date.now());
-    setChallenge(ch);
-    onLogChallenge(archetype, ch);
+    try {
+      setError(null);
+      const ch = generateChallenge(nodeStates, archetype, allNodes, Date.now());
+      setChallenge(ch);
+      onLogChallenge(archetype, ch);
+    } catch(e) {
+      setError(e.message || "Unknown error generating challenge");
+    }
   }, [nodeStates, archetype, allNodes, onLogChallenge]);
 
   const mastered = Object.values(nodeStates).filter(v => MASTERY[v]?.idx >= 2).length;
@@ -2014,7 +2037,7 @@ function ChallengeTab({ nodeStates, archetype, allNodes, challengeLogs, onLogCha
 
   if (!challenge) {
     return (
-      <div style={{ padding: 32, height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+      <div style={{ padding: 32, height: "100%", width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
         <div style={{ fontFamily: "Orbitron", fontSize: 9, color: textDim, letterSpacing: 6, marginBottom: 24 }}>CHALLENGE GENERATOR</div>
         <div style={{ fontFamily: "Orbitron", fontSize: 20, color: arch.color, fontWeight: 700, marginBottom: 12 }}>{arch.icon} {arch.name}</div>
         <div style={{ fontFamily: "Literata", fontSize: 14, color: textMed, lineHeight: 1.7, maxWidth: 480, marginBottom: 8 }}>
@@ -2037,6 +2060,11 @@ function ChallengeTab({ nodeStates, archetype, allNodes, challengeLogs, onLogCha
           color: canGenerate ? arch.color : textDim,
           borderRadius: 6, cursor: canGenerate ? "pointer" : "not-allowed", transition: "all 0.3s",
         }}>Initialize Challenge Sequence</button>
+        {error && (
+          <div style={{ fontFamily: "Exo 2", fontSize: 12, color: "#f66", marginTop: 16, padding: "10px 16px", border: "1px solid #f6633", borderRadius: 6, maxWidth: 480, wordBreak: "break-word" }}>
+            Error: {error}
+          </div>
+        )}
       </div>
     );
   }
@@ -2044,7 +2072,7 @@ function ChallengeTab({ nodeStates, archetype, allNodes, challengeLogs, onLogCha
   const ch = challenge;
 
   return (
-    <div style={{ padding: 24, overflowY: "auto", height: "100%", maxWidth: 780 }}>
+    <div style={{ padding: 24, overflowY: "auto", height: "100%", maxWidth: 780, margin: "0 auto", width: "100%" }}>
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
         <div>
@@ -2392,7 +2420,6 @@ function NeurocybeApp() {
     </div>
   );
 }
-
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(React.createElement(NeurocybeApp));
