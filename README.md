@@ -91,8 +91,12 @@ The curriculum privileges the Ashby–Beer–Bateson–Maturana–von Foerster l
 
 ## Credits
 
-NEUROCYBE was designed collaboratively between a human learner and an AI (Claude/Chiron) in a single extended session, demonstrating the kind of human-AI centaur work the system is built to train.
+NEUROCYBE was designed collaboratively between a human learner and an AI (Chiron) in a single extended session, demonstrating the kind of human-AI centaur work the system is built to train.
 
 ## License
 
-This project is provided for personal educational use.
+[![CC BY-NC-SA 4.0](https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+
+You are free to share and adapt this material for non-commercial purposes, with attribution, under the same license. For commercial licensing inquiries, contact the author.
